@@ -1,83 +1,80 @@
 import React from "react";
 
-class FriendForm extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      friend: {
-        name: "",
-        age: "",
-        email: ""
-      }
-    };
-  }
+const FriendForm = props => {
+  // constructor(props) {
+  //     super(props);
+  //     this.state = {
+  //         friend: {
+  //             name: "",
+  //             age: "",
+  //             email: ""
+  //         }
+  //     }
+  // }
 
-  handleChange = e => {
-    if (e.target.name === "age") {
-      let numberValue = Number(e.target.value);
+  // handleChange = e => {
+  //     if (e.target.name === "age") {
+  //         let numberValue = Number(e.target.value);
 
-      this.setState({
-        friend: {
-          ...this.state.friend,
-          [e.target.name]: numberValue
-        }
-      });
-    } else {
-      this.setState({
-        friend: {
-          ...this.state.friend,
-          [e.target.name]: e.target.value
-        }
-      });
-    }
-  };
+  //         this.setState({
+  //             friend: {
+  //                 ...this.state.friend,
+  //                 [e.target.name]: numberValue
+  //             }
+  //         })
+  //     } else {
+  //         this.setState({
+  //             friend: {
+  //                 ...this.state.friend,
+  //                 [e.target.name]: e.target.value
+  //             }
+  //         })
+  //     }
 
-  addFriendToList = e => {
-    e.preventDefault();
-    this.props.addFriendToList(this.state.friend);
-    this.setState(
-      {
-        friend: {
-          name: "",
-          age: "",
-          email: ""
-        }
-      },
-      console.log("addFriendToList in FriendForm", this.state)
-    );
-  };
-  render() {
-    console.log("render in FriendForm", this.state);
-    return (
-      <div>
-        {/* <form onSubmit={this.addFriendToList}> */}
-        <form>
-          <input
-            type="text"
-            value={this.state.friend.name}
-            name="name"
-            placeholder="Name"
-            onChange={this.handleChange}
-          />
-          <input
-            type="number"
-            value={this.state.friend.age}
-            name="age"
-            placeholder="Age"
-            onChange={this.handleChange}
-          />
-          <input
-            type="email"
-            value={this.state.friend.email}
-            name="email"
-            placeholder="Email"
-            onChange={this.handleChange}
-          />
-          <button onClick={this.addFriendToList}>Add friend</button>
-        </form>
-      </div>
-    );
-  }
-}
+  // }
+
+  // addFriendToList = e => {
+  //     e.preventDefault();
+  //     this.props.addFriendToList(this.state.friend);
+  //     this.setState({
+  //         friend: {
+  //             name: "",
+  //             age: "",
+  //             email: ""
+  //         }
+  //     }, console.log("addFriendToList in FriendForm", this.state))
+
+  // }
+
+  return (
+    <div>
+      {/* <form onSubmit={this.addFriendToList}> */}
+      <form onSubmit={e => props.addFriendToList(e)}>
+        <input
+          type="text"
+          value={props.friend.name}
+          name="name"
+          placeholder="Name"
+          onChange={props.handleChange}
+        />
+        <input
+          type="number"
+          value={props.friend.age}
+          name="age"
+          placeholder="Age"
+          onChange={props.handleChange}
+        />
+        <input
+          type="email"
+          value={props.friend.email}
+          name="email"
+          placeholder="Email"
+          onChange={props.handleChange}
+        />
+        <button>Add friend</button>
+      </form>
+    </div>
+  );
+};
 
 export default FriendForm;

@@ -22,7 +22,13 @@ const DataWrapperDiv = styled.div`
 class App extends Component {
   state = {
     friends: [],
-    error: ""
+    error: "",
+    isUpdating: false,
+    friend: {
+      name: "",
+      age: "",
+      email: ""
+    }
   };
 
   componentDidMount() {
@@ -39,35 +45,66 @@ class App extends Component {
       .catch(() => this.setState({ error: "There has been an error." }));
   }
 
-  addFriendToList = friend => {
+  handleChange = e => {
+    if (e.target.name === "age") {
+      let numberValue = Number(e.target.value);
+
+      this.setState({
+        friend: {
+          ...this.state.friend,
+          [e.target.name]: numberValue
+        }
+      });
+    } else {
+      this.setState({
+        friend: {
+          ...this.state.friend,
+          [e.target.name]: e.target.value
+        }
+      });
+    }
+  };
+
+  addFriendToList = e => {
+    e.preventDefault();
     axios
-      .post("http://localhost:5000/friends", friend)
+      .post("http://localhost:5000/friends", this.state.friend)
       .then(res => {
-        console.log("addFriendToList in App", res);
-        this.updateStateWithNewData();
+        console.log("addFriendToList", res);
+        this.setState({
+          friends: res.data
+        });
+        this.props.history.push("/");
       })
       .catch(err => console.log(err));
   };
 
-  updateStateWithNewData() {
-    axios
-      .get("http://localhost:5000/friends")
-      .then(res => {
-        this.setState(
-          {
-            friends: res.data,
-            error: ""
-          },
-          console.log("updateStateWithNewData", res)
-        );
-      })
-      .catch(err => {
-        console.log(err);
-        this.setState({
-          error: "There has been an error."
-        });
-      });
-  }
+  // updateStateWithNewData() {
+  //   axios.get("http://localhost:5000/friends")
+  //     .then(res => {
+  //       this.setState({
+  //         friends: res.data,
+  //         error: ""
+  //         },
+  //         console.log("updateStateWithNewData", res)
+  //       )
+  //     })
+  //     .catch(err => {
+  //       console.log(err);
+  //       this.setState({
+  //         error: "There has been an error."
+  //       })
+  //     });
+  // }
+
+  populateForm = (e, id) => {
+    e.preventDefault();
+    this.setState({
+      isUpdating: true,
+      friend: this.state.friends.find(friend => friend.id === id)
+    });
+    this.props.history.push("/addfriend");
+  };
 
   render() {
     console.log("render in App", this.state);
@@ -83,7 +120,11 @@ class App extends Component {
             <Route
               path="/"
               render={props => (
-                <FriendsList {...props} friends={this.state.friends} />
+                <FriendsList
+                  {...props}
+                  friends={this.state.friends}
+                  populateForm={this.populateForm}
+                />
               )}
             />
           </div>
@@ -91,7 +132,13 @@ class App extends Component {
             <Route
               path="/addfriend"
               render={props => (
-                <FriendForm {...props} addFriendToList={this.addFriendToList} />
+                <FriendForm
+                  {...props}
+                  addFriendToList={this.addFriendToList}
+                  friend={this.state.friend}
+                  handleChange={this.handleChange}
+                  isUpdating={this.state.isUpdating}
+                />
               )}
             />
           </div>

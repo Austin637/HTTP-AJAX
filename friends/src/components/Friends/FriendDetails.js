@@ -7,6 +7,9 @@ const FriendDetails = props => {
     <div>
       {props.friend.age}
       {props.friend.email}
+      <button onClick={e => props.populateForm(e, props.friend.id)}>
+        Update Info
+      </button>
     </div>
   );
 };
