@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import styled from "styled-components";
 
 const FormWrapper = styled.div`
@@ -18,8 +19,29 @@ const FormInput = styled.input`
   margin-bottom: 10px;
 `;
 
+const ButtonWrapper = styled.div`
+  display: flex;
+  justify-content: space-between;
+
+  a {
+    color: white;
+  }
+`;
+
 const FormButton = styled.button`
+  cursor: pointer;
   margin-top: 15px;
+  width: 48%;
+
+  &:hover {
+    background: green;
+  }
+`;
+
+const CancelButton = styled(FormButton)`
+  &:hover {
+    background: red;
+  }
 `;
 
 const FriendForm = props => {
@@ -31,6 +53,7 @@ const FriendForm = props => {
       props.addFriendToList();
     }
   }
+
   // constructor(props) {
   //     super(props);
   //     this.state = {
@@ -101,9 +124,15 @@ const FriendForm = props => {
           placeholder="Email"
           onChange={props.handleChange}
         />
-        <FormButton>
-          {props.isUpdating ? "Update Info" : "Add Friend"}
-        </FormButton>
+        <ButtonWrapper>
+          <FormButton type="submit">
+            {props.isUpdating ? "Update Info" : "Add Friend"}
+          </FormButton>
+
+          <CancelButton onClick={e => props.resetFormRoute(e)}>
+            Cancel
+          </CancelButton>
+        </ButtonWrapper>
       </Form>
     </FormWrapper>
   );

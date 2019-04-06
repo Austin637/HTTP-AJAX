@@ -136,7 +136,22 @@ class App extends Component {
       isUpdating: true,
       friend: this.state.friends.find(friend => friend.id === id)
     });
-    this.props.history.push("/addfriend");
+    this.props.history.push("/form");
+  };
+
+  resetFormRoute = e => {
+    e.preventDefault();
+    if (this.state.isUpdating) {
+      this.setState({
+        isUpdating: false,
+        friend: {
+          name: "",
+          age: "",
+          email: ""
+        }
+      });
+    }
+    this.props.history.push("/");
   };
 
   deleteFriend = (e, id) => {
@@ -158,7 +173,7 @@ class App extends Component {
       <AppWrapperDiv>
         {this.state.error && `${this.state.error}`}
         <div>
-          <Navigation />
+          <Navigation isUpdating={this.state.isUpdating} />
         </div>
 
         <DataWrapperDiv>
@@ -177,7 +192,7 @@ class App extends Component {
           </div>
           <FormWrapperDiv>
             <Route
-              path="/addfriend"
+              path="/form"
               render={props => (
                 <FriendForm
                   {...props}
@@ -186,6 +201,7 @@ class App extends Component {
                   friend={this.state.friend}
                   handleChange={this.handleChange}
                   isUpdating={this.state.isUpdating}
+                  resetFormRoute={this.resetFormRoute}
                 />
               )}
             />
