@@ -18,6 +18,7 @@ const FriendsList = props => {
               <FriendDetails
                 {...properties}
                 populateForm={props.populateForm}
+                deleteFriend={props.deleteFriend}
                 friend={friend}
                 key={friend.id}
               />

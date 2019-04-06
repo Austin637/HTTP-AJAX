@@ -132,6 +132,19 @@ class App extends Component {
     this.props.history.push("/addfriend");
   };
 
+  deleteFriend = (e, id) => {
+    e.preventDefault();
+    axios
+      .delete(`http://localhost:5000/friends/${id}`)
+      .then(res => {
+        this.setState({
+          friends: res.data
+        });
+        this.props.history.push("/");
+      })
+      .catch(err => console.log(err));
+  };
+
   render() {
     console.log("render in App", this.state);
     return (
@@ -150,6 +163,7 @@ class App extends Component {
                   {...props}
                   friends={this.state.friends}
                   populateForm={this.populateForm}
+                  deleteFriend={this.deleteFriend}
                 />
               )}
             />
