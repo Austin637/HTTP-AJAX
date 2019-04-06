@@ -7,16 +7,23 @@ import FriendsList from "./components/Friends/FriendsList";
 import FriendForm from "./components/Friends/FriendForm";
 import Navigation from "./components/Navigation/Navigation";
 
-import "./App.css";
-
 const AppWrapperDiv = styled.div`
   display: flex;
   flex-direction: column;
-  border: 1px solid red;
+  max-width: 1200px;
+  margin: 0 auto;
 `;
 
 const DataWrapperDiv = styled.div`
   display: flex;
+  justify-content: space-between;
+`;
+
+const FormWrapperDiv = styled.div`
+  display: flex;
+  justify-content: center;
+
+  width: 100%;
 `;
 
 class App extends Component {
@@ -168,7 +175,7 @@ class App extends Component {
               )}
             />
           </div>
-          <div>
+          <FormWrapperDiv>
             <Route
               path="/addfriend"
               render={props => (
@@ -182,7 +189,7 @@ class App extends Component {
                 />
               )}
             />
-          </div>
+          </FormWrapperDiv>
         </DataWrapperDiv>
       </AppWrapperDiv>
     );

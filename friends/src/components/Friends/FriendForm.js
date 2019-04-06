@@ -1,4 +1,26 @@
 import React from "react";
+import styled from "styled-components";
+
+const FormWrapper = styled.div`
+  min-width: 400px;
+  margin: 0 auto;
+`;
+
+const Form = styled.form`
+  display: flex;
+  flex-direction: column;
+`;
+
+const FormInput = styled.input`
+  padding: 10px;
+  border: 1px solid black;
+  font-size: 1.6rem;
+  margin-bottom: 10px;
+`;
+
+const FormButton = styled.button`
+  margin-top: 15px;
+`;
 
 const FriendForm = props => {
   function conditionalSubmit(e) {
@@ -55,33 +77,35 @@ const FriendForm = props => {
   // }
 
   return (
-    <div>
+    <FormWrapper>
       {/* <form onSubmit={this.addFriendToList}> */}
-      <form onSubmit={conditionalSubmit}>
-        <input
+      <Form onSubmit={conditionalSubmit}>
+        <FormInput
           type="text"
           value={props.friend.name}
           name="name"
           placeholder="Name"
           onChange={props.handleChange}
         />
-        <input
+        <FormInput
           type="number"
           value={props.friend.age}
           name="age"
           placeholder="Age"
           onChange={props.handleChange}
         />
-        <input
+        <FormInput
           type="email"
           value={props.friend.email}
           name="email"
           placeholder="Email"
           onChange={props.handleChange}
         />
-        <button>{props.isUpdating ? "Update Info" : "Add Friend"}</button>
-      </form>
-    </div>
+        <FormButton>
+          {props.isUpdating ? "Update Info" : "Add Friend"}
+        </FormButton>
+      </Form>
+    </FormWrapper>
   );
 };
 
