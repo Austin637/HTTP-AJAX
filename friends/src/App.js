@@ -65,14 +65,40 @@ class App extends Component {
     }
   };
 
-  addFriendToList = e => {
-    e.preventDefault();
+  addFriendToList = () => {
     axios
       .post("http://localhost:5000/friends", this.state.friend)
       .then(res => {
         console.log("addFriendToList", res);
         this.setState({
-          friends: res.data
+          friends: res.data,
+          friend: {
+            name: "",
+            age: "",
+            email: ""
+          }
+        });
+        this.props.history.push("/");
+      })
+      .catch(err => console.log(err));
+  };
+
+  updateFriendInfo = () => {
+    axios
+      .put(
+        `http://localhost:5000/friends/${this.state.friend.id}`,
+        this.state.friend
+      )
+      .then(res => {
+        console.log("addFriendToList", res);
+        this.setState({
+          friends: res.data,
+          friend: {
+            name: "",
+            age: "",
+            email: ""
+          },
+          isUpdating: false
         });
         this.props.history.push("/");
       })
@@ -135,6 +161,7 @@ class App extends Component {
                 <FriendForm
                   {...props}
                   addFriendToList={this.addFriendToList}
+                  updateFriendInfo={this.updateFriendInfo}
                   friend={this.state.friend}
                   handleChange={this.handleChange}
                   isUpdating={this.state.isUpdating}
