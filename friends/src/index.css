@@ -135,6 +135,7 @@ table {
 
 html {
   font-size: 62.5%;
+  font-family: "Helvetica", "Arial", sans-serif;
 }
 
 p {
@@ -156,4 +157,18 @@ h1 {
 
 h2 {
   font-size: 2.4rem;
+}
+
+a {
+  text-decoration: none;
+  color: black;
+  font-size: 1.6rem;
+}
+
+button {
+  color: white;
+  background: black;
+  border: none;
+  padding: 10px 15px;
+  font-size: 1.6rem;
 }

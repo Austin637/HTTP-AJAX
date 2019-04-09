@@ -7,16 +7,23 @@ import FriendsList from "./components/Friends/FriendsList";
 import FriendForm from "./components/Friends/FriendForm";
 import Navigation from "./components/Navigation/Navigation";
 
-import "./App.css";
-
 const AppWrapperDiv = styled.div`
   display: flex;
   flex-direction: column;
-  border: 1px solid red;
+  max-width: 1200px;
+  margin: 0 auto;
 `;
 
 const DataWrapperDiv = styled.div`
   display: flex;
+  justify-content: space-between;
+`;
+
+const FormWrapperDiv = styled.div`
+  display: flex;
+  justify-content: center;
+
+  width: 100%;
 `;
 
 class App extends Component {
@@ -65,14 +72,40 @@ class App extends Component {
     }
   };
 
-  addFriendToList = e => {
-    e.preventDefault();
+  addFriendToList = () => {
     axios
       .post("http://localhost:5000/friends", this.state.friend)
       .then(res => {
         console.log("addFriendToList", res);
         this.setState({
-          friends: res.data
+          friends: res.data,
+          friend: {
+            name: "",
+            age: "",
+            email: ""
+          }
+        });
+        this.props.history.push("/");
+      })
+      .catch(err => console.log(err));
+  };
+
+  updateFriendInfo = () => {
+    axios
+      .put(
+        `http://localhost:5000/friends/${this.state.friend.id}`,
+        this.state.friend
+      )
+      .then(res => {
+        console.log("addFriendToList", res);
+        this.setState({
+          friends: res.data,
+          friend: {
+            name: "",
+            age: "",
+            email: ""
+          },
+          isUpdating: false
         });
         this.props.history.push("/");
       })
@@ -103,7 +136,35 @@ class App extends Component {
       isUpdating: true,
       friend: this.state.friends.find(friend => friend.id === id)
     });
-    this.props.history.push("/addfriend");
+    this.props.history.push("/form");
+  };
+
+  resetFormRoute = e => {
+    e.preventDefault();
+    if (this.state.isUpdating) {
+      this.setState({
+        isUpdating: false,
+        friend: {
+          name: "",
+          age: "",
+          email: ""
+        }
+      });
+    }
+    this.props.history.push("/");
+  };
+
+  deleteFriend = (e, id) => {
+    e.preventDefault();
+    axios
+      .delete(`http://localhost:5000/friends/${id}`)
+      .then(res => {
+        this.setState({
+          friends: res.data
+        });
+        this.props.history.push("/");
+      })
+      .catch(err => console.log(err));
   };
 
   render() {
@@ -112,7 +173,7 @@ class App extends Component {
       <AppWrapperDiv>
         {this.state.error && `${this.state.error}`}
         <div>
-          <Navigation />
+          <Navigation isUpdating={this.state.isUpdating} />
         </div>
 
         <DataWrapperDiv>
@@ -124,24 +185,27 @@ class App extends Component {
                   {...props}
                   friends={this.state.friends}
                   populateForm={this.populateForm}
+                  deleteFriend={this.deleteFriend}
                 />
               )}
             />
           </div>
-          <div>
+          <FormWrapperDiv>
             <Route
-              path="/addfriend"
+              path="/form"
               render={props => (
                 <FriendForm
                   {...props}
                   addFriendToList={this.addFriendToList}
+                  updateFriendInfo={this.updateFriendInfo}
                   friend={this.state.friend}
                   handleChange={this.handleChange}
                   isUpdating={this.state.isUpdating}
+                  resetFormRoute={this.resetFormRoute}
                 />
               )}
             />
-          </div>
+          </FormWrapperDiv>
         </DataWrapperDiv>
       </AppWrapperDiv>
     );
